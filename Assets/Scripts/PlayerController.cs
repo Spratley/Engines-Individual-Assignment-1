@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
         reticle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         reticle.GetComponent<MeshRenderer>().material.color = Color.red;
         reticle.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        reticle.AddComponent<SphereCollider>();
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
         {
             GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
+            cubieboy.AddComponent<BoxCollider>();
             cubieboy.transform.position = reticle.transform.position;
             cubieboy.tag = "Saveable";
         }
@@ -57,5 +59,10 @@ public class PlayerController : MonoBehaviour
             reticleDist = 1;
 
         reticle.transform.position = Camera.main.transform.position + Camera.main.transform.forward * reticleDist;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.tag);
     }
 }
