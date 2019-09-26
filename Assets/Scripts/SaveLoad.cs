@@ -15,20 +15,41 @@ public class SaveLoad : MonoBehaviour
     const string DLL_NAME = "SaveLoad";
 
     [DllImport(DLL_NAME)]
-
     public static extern bool Save();
 
     [DllImport(DLL_NAME)]
-    public static extern void PushToSaveStack(SaveObj toSave);
+    public static extern void PushToStack(SaveObj toSave);
 
     [DllImport(DLL_NAME)]
-    public static extern int GetNumberOfLines();
+    public static extern int PreloadObjects();
+
+    [DllImport(DLL_NAME)]
+    public static extern SaveObj LoadObject(int id);
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            Debug.Log(GetNumberOfLines());
+            ClearCubes();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            ClearCubes();
+
+            int numObjs = PreloadObjects();
+            for(int i = 0; i < numObjs; ++i)
+            {
+                GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
+                cubieboy.AddComponent<BoxCollider>();
+                cubieboy.tag = "Saveable";
+
+                SaveObj data = LoadObject(i);
+
+                cubieboy.transform.position = data.position;
+
+            }
         }
 
 
@@ -44,12 +65,20 @@ public class SaveLoad : MonoBehaviour
                 obj.rotation = go.transform.rotation.eulerAngles;
                 obj.scale = go.transform.localScale;
 
-                PushToSaveStack(obj);
+                PushToStack(obj);
             }
-            if (!Save())
-                Debug.Log("ERROR: Failed to save");
-            else
-                Debug.Log("Save successful!");
+            Save();
+            //if (!)
+            //    Debug.Log("ERROR: Failed to save");
+            //else
+            Debug.Log("Save successful!");
         }
+    }
+
+    void ClearCubes()
+    {
+        GameObject[] objectsToClear = GameObject.FindGameObjectsWithTag("Saveable");
+        foreach (GameObject go in objectsToClear)
+            Destroy(go);
     }
 }

@@ -7,13 +7,17 @@
 class PLUGIN_API SaverLoader
 {
 public:
-	std::vector<SaveObj> SaveStack;
+	std::vector<SaveObj> objectStack;
 	
-	void PushToSaveStack(SaveObj toSave);
+	void PushToStack(SaveObj toSave);
 	
 	bool Save();
 
-	int GetNumberOfLines();
+	int PreloadObjects();
+
+	void ResetStack();
+	
+	SaveObj LoadObject(int id);
 
 
 };

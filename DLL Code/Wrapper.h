@@ -8,8 +8,9 @@ extern "C"
 #endif
 
 	PLUGIN_API bool Save();
-	PLUGIN_API void PushToSaveStack(SaveObj toSave);
-	PLUGIN_API int GetNumberOfLines();
+	PLUGIN_API void PushToStack(SaveObj toSave);
+	PLUGIN_API int PreloadObjects();
+	PLUGIN_API SaveObj LoadObject(int id);
 
 #ifdef __cplusplus
 }
