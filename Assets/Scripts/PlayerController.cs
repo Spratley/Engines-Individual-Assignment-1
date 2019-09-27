@@ -20,24 +20,26 @@ public class PlayerController : MonoBehaviour
         reticle.GetComponent<MeshRenderer>().material.color = Color.red;
         reticle.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         reticle.AddComponent<SphereCollider>();
+        reticle.layer = 2;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+                if(hit.transform.tag == "Saveable")
+                    Destroy(hit.collider.gameObject);
+        }
+
         UpdatePlayerMovement();
 
         UpdateReticle();
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
-            cubieboy.AddComponent<BoxCollider>();
-            cubieboy.transform.position = reticle.transform.position;
-            cubieboy.tag = "Saveable";
-        }
+        SpawnCube();
     }
 
     void UpdatePlayerMovement()
@@ -61,8 +63,15 @@ public class PlayerController : MonoBehaviour
         reticle.transform.position = Camera.main.transform.position + Camera.main.transform.forward * reticleDist;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void SpawnCube()
     {
-        Debug.Log(collision.gameObject.tag);
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
+            cubieboy.AddComponent<BoxCollider>();
+            cubieboy.transform.position = reticle.transform.position;
+            cubieboy.tag = "Saveable";
+        }
     }
 }
