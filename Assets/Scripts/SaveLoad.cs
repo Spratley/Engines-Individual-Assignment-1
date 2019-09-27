@@ -48,6 +48,8 @@ public class SaveLoad : MonoBehaviour
                 SaveObj data = LoadObject(i);
 
                 cubieboy.transform.position = data.position;
+                cubieboy.transform.rotation = Quaternion.Euler(data.rotation);
+                cubieboy.transform.localScale = data.scale;
 
             }
         }

@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
     private GameObject reticle;
     private float reticleDist;
 
+    private Vector3 p1;
+    private Vector3 p2;
+
+    public GameObject ghostCube;
+
     private void Start()
     {
         reticle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -67,11 +72,55 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            p1 = reticle.transform.position;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            p2 = reticle.transform.position;
+
+            Vector3 center = (p1 + p2) / 2;
+            ghostCube.transform.position = center;
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                Vector3 a = Vector3.one * Mathf.Sqrt((p1 - p2).magnitude / 3);
+                Vector3 b = p2 - center;
+                float angle = Mathf.Acos(Vector3.Dot(a/2, b) / ((a/2).magnitude * b.magnitude));
+                Vector3 axis = Vector3.Cross(a/2, b);
+                ghostCube.transform.localScale = a;
+                ghostCube.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, axis);
+            }
+            else
+            {
+                ghostCube.transform.rotation = Quaternion.identity;
+                Vector3 scale;
+                scale.x = Mathf.Abs(p1.x - p2.x);
+                scale.y = Mathf.Abs(p1.y - p2.y);
+                scale.z = Mathf.Abs(p1.z - p2.z);
+                ghostCube.transform.localScale = scale;
+            }
+
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
             GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
             cubieboy.AddComponent<BoxCollider>();
-            cubieboy.transform.position = reticle.transform.position;
             cubieboy.tag = "Saveable";
+            cubieboy.transform.position = ghostCube.transform.position;
+            cubieboy.transform.rotation = ghostCube.transform.rotation;
+            cubieboy.transform.localScale = ghostCube.transform.localScale;
+            ghostCube.transform.position = Vector3.down * 100000;
+            
         }
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    GameObject cubieboy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //    cubieboy.GetComponent<MeshRenderer>().material.color = Color.blue;
+        //    cubieboy.AddComponent<BoxCollider>();
+        //    cubieboy.transform.position = reticle.transform.position;
+        //    cubieboy.tag = "Saveable";
+        //}
     }
 }
