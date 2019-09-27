@@ -473,7 +473,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281561284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.017605, y: 36.628555, z: 69.97501}
+  m_LocalPosition: {x: 0, y: -10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -513,7 +513,7 @@ MonoBehaviour:
   runSpeed: 5
   lookSpeed: 2
   reticleSpeed: 0.1
-  ghostCube: {fileID: 0}
+  ghostCube: {fileID: 1281561284}
 --- !u!4 &2089624401
 Transform:
   m_ObjectHideFlags: 0
